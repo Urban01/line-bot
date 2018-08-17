@@ -11,7 +11,7 @@ $text = $jsonObj->{"events"}[0]->{"message"}->{"text"};
 $replyToken = $jsonObj->{"events"}[0]->{"replyToken"};
 $userId = $jsonObj->{"events"}[0]->{"source"}->{"userId"};
 
-$response = chat($text);
+$response = $text;
 
 $response_format_text = [
 	"type" => "text",
