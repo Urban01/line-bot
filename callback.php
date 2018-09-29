@@ -23,7 +23,7 @@ $json = mb_convert_encoding($json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
 $arr = json_decode($json,true);
 
 $image_url = $arr["value"]["contentUrl"];
-$image_thumb_url = $arr["value"]["thumbnailUrl"];;
+$image_thumb_url = $arr["value"]["thumbnailUrl"];
 
 $response_format = [
 	'type' => 'image',
