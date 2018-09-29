@@ -19,15 +19,25 @@ $options = array ( 'http' => array (
 $context = stream_context_create($options);
 $result = file_get_contents('https://api.cognitive.microsoft.com/bing/v7.0/images/search' . "?q=" . urlencode($text), false, $context);
 
-$json = json_decode($result);
+$headers = array();
+foreach ($http_response_header as $k => $v) {
+	$h = explode(":", $v, 2);
+    if (isset($h[1]))
+    	if (preg_match("/^BingAPIs-/", $h[0]) || preg_match("/^X-MSEdge-/", $h[0]))
+        	$headers[trim($h[0])] = trim($h[1]);
+}
 
-$image_url = $json->{"value"}[0]->{"contentUrl"};
-$image_thumb_url = $json->{"value"}[0]->{"thumbnailUrl"};
+list($headers, $json) = array($headers, $result);
+
+$json = json_decode($json, true);
+
+$image_url = $json["value"][0]["contentUrl"];
+$image_thumb_url = $json["value"][0]["thumbnailUrl"];;
 
 $response_format = [
 	'type' => 'image',
-	'originalContentUrl' => 'https://naoki-h1210.github.io/contents/img/web.png',
-	'previewImageUrl' => 'https://naoki-h1210.github.io/contents/img/web.png'
+	'originalContentUrl' => $image_url,
+	'previewImageUrl' => $image_thumb_url
 ];
 
 $post_data = [
