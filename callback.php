@@ -11,17 +11,39 @@ $text = $jsonObj->{"events"}[0]->{"message"}->{"text"};
 $replyToken = $jsonObj->{"events"}[0]->{"replyToken"};
 $userId = $jsonObj->{"events"}[0]->{"source"}->{"userId"};
 
-$response = 'aaaaa';
+$account_key = cf96e207349f429383d69d8f092eab8d
 
-$response_format_text = [
-	"type" => "text",
-	"text" => $response
+$keyword = urlencode("'" . $text . "'");
+$credencial = 'Authorization: Basic ' . base64_encode($account_key . ":" . $account_key);
+$context = stream_context_create(array(
+	'http' => array(
+	'header' => $credencial
+	)
+));
+
+$contents = file_get_contents('https://api.datamarket.azure.com/Bing/Search/Image?$format=json&$top=10&Adult='."'".'Strict'."'".'&Query='.$keyword, 0, $context);
+$json = json_decode($contents);
+
+$images = array();
+foreach ($json->d->results as $result) {
+	$images[] = array($result->MediaUrl, $result->Thumbnail->MediaUrl);
+}
+$rand = rand(0, count($images)-1);
+$image_url = $images[$rand][0];
+$image_thumb_url = $images[$rand][1];
+
+
+$response_format = [
+	'type' => 'image",
+	'originalContentUrl' => $image_url,
+	'previewImageUrl' => $image_thumb_url
 ];
 
 $post_data = [
 	"replyToken" => $replyToken,
-	"messages" => [$response_format_text]
+	"messages" => [$response_format]
 ];
+
 
 $ch = curl_init('https://api.line.me/v2/bot/message/reply');
 curl_setopt($ch, CURLOPT_POST, true);
