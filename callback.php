@@ -31,8 +31,8 @@ list($headers, $json) = array($headers, $result);
 
 $json = json_decode($json, true);
 
-$image_url = $json["value"][0]["contentUrl"];
-$image_thumb_url = $json["value"][0]["thumbnailUrl"];;
+$image_url = $json["value"]["contentUrl"];
+$image_thumb_url = $json["value"]["thumbnailUrl"];;
 
 $response_format = [
 	'type' => 'image',
