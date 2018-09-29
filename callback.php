@@ -22,8 +22,8 @@ $json = file_get_contents('https://api.cognitive.microsoft.com/bing/v7.0/images/
 $json = mb_convert_encoding($json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
 $arr = json_decode($json,true);
 
-$image_url = $arr["value"]["contentUrl"];
-$image_thumb_url = $arr["value"]["thumbnailUrl"];
+$image_url = $arr["value"][0]["contentUrl"];
+$image_thumb_url = $arr["value"][0]["thumbnailUrl"];
 
 $response_format = [
 	'type' => 'image',
