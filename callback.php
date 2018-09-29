@@ -35,26 +35,3 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 $result = curl_exec($ch);
 error_log($result);
 curl_close($ch);
-
-
-function chat($text) {
-    // docomo chatAPI
-    $api_key = '4b39684f54415547777235766638784644694377556c356c335a474268362e4c55436c3835384b324d5934';
-    $api_url = sprintf('https://api.apigw.smt.docomo.ne.jp/naturalChatting/v1/dialogue?APIKEY=%s', $api_key);
-    $req_body = array('utt' => $text);
-
-    $headers = array(
-        'Content-Type: application/json; charset=UTF-8',
-    );
-    $options = array(
-        'http'=>array(
-            'method'  => 'POST',
-            'header'  => implode("\r\n", $headers),
-            'content' => json_encode($req_body),
-            )
-        );
-    $stream = stream_context_create($options);
-    $res = json_decode(file_get_contents($api_url, false, $stream));
-
-    return $res->utt;
-}
