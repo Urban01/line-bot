@@ -34,7 +34,7 @@ $image_thumb_url = $images[$rand][1];
 
 
 $response_format = [
-	'type' => 'image",
+	'type' => 'image',
 	'originalContentUrl' => $image_url,
 	'previewImageUrl' => $image_thumb_url
 ];
