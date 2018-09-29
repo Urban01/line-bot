@@ -17,22 +17,13 @@ $options = array ( 'http' => array (
                         'method' => 'GET' ));
                         
 $context = stream_context_create($options);
-$result = file_get_contents('https://api.cognitive.microsoft.com/bing/v7.0/images/search' . "?q=" . urlencode($text), false, $context);
+$json = file_get_contents('https://api.cognitive.microsoft.com/bing/v7.0/images/search' . "?q=" . urlencode($text), false, $context);
 
-$headers = array();
-foreach ($http_response_header as $k => $v) {
-	$h = explode(":", $v, 2);
-    if (isset($h[1]))
-    	if (preg_match("/^BingAPIs-/", $h[0]) || preg_match("/^X-MSEdge-/", $h[0]))
-        	$headers[trim($h[0])] = trim($h[1]);
-}
+$json = mb_convert_encoding($json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
+$arr = json_decode($json,true);
 
-list($headers, $json) = array($headers, $result);
-
-$json = json_decode($json, true);
-
-$image_url = $json["value"]["contentUrl"];
-$image_thumb_url = $json["value"]["thumbnailUrl"];;
+$image_url = $arr["value"]["contentUrl"];
+$image_thumb_url = $arr["value"]["thumbnailUrl"];;
 
 $response_format = [
 	'type' => 'image',
