@@ -11,25 +11,18 @@ $text = $jsonObj->{"events"}[0]->{"message"}->{"text"};
 $replyToken = $jsonObj->{"events"}[0]->{"replyToken"};
 $userId = $jsonObj->{"events"}[0]->{"source"}->{"userId"};
 
-$sURL = 'https://api.cognitive.microsoft.com/bing/v7.0/images/search?q=cats';
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $sURL); 
-curl_setopt($ch, CURLOPT_TIMEOUT, '1'); 
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-    'Content-Type: multipart/form-data',
-    'Ocp-Apim-Subscription-Key: cf96e207349f429383d69d8f092eab8d'
-));
-$content = curl_exec($ch);
+$headers = "Ocp-Apim-Subscription-Key: cf96e207349f429383d69d8f092eab8d\r\n";
+$options = array ( 'http' => array (
+                        'header' => $headers,
+                        'method' => 'GET' ));
+                        
+$context = stream_context_create($options);
+$result = file_get_contents('https://api.cognitive.microsoft.com/bing/v7.0/images/search' . "?q=" . urlencode($text), false, $context);
 
-$contents = file_get_contents($content);
-
-$json = json_decode($contents);
+$json = json_decode($result);
 
 $image_url = $json->{"value"}[0]->{"contentUrl"};
 $image_thumb_url = $json->{"value"}[0]->{"thumbnailUrl"};
-
 
 $response_format = [
 	'type' => 'image',
