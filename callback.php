@@ -26,8 +26,8 @@ $image_thumb_url = $json->{"value"}[0]->{"thumbnailUrl"};
 
 $response_format = [
 	'type' => 'image',
-	'originalContentUrl' => $image_url,
-	'previewImageUrl' => $image_thumb_url
+	'originalContentUrl' => 'https://naoki-h1210.github.io/contents/img/web.png',
+	'previewImageUrl' => 'https://naoki-h1210.github.io/contents/img/web.png'
 ];
 
 $post_data = [
