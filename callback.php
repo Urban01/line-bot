@@ -18,8 +18,6 @@ $options = array ( 'http' => array (
                         
 $context = stream_context_create($options);
 $json = file_get_contents('https://api.cognitive.microsoft.com/bing/v7.0/images/search' . "?q=" . urlencode($text), false, $context);
-
-$json = mb_convert_encoding($json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
 $arr = json_decode($json,true);
 
 $image_url = $arr["value"][0]["contentUrl"];
