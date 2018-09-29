@@ -11,26 +11,24 @@ $text = $jsonObj->{"events"}[0]->{"message"}->{"text"};
 $replyToken = $jsonObj->{"events"}[0]->{"replyToken"};
 $userId = $jsonObj->{"events"}[0]->{"source"}->{"userId"};
 
-$account_key = 'cf96e207349f429383d69d8f092eab8d'
-
-$keyword = urlencode("'" . $text . "'");
-$credencial = 'Authorization: Basic ' . base64_encode($account_key . ":" . $account_key);
-$context = stream_context_create(array(
-	'http' => array(
-	'header' => $credencial
-	)
+$sURL = 'https://api.cognitive.microsoft.com/bing/v7.0/images/search?q=cats';
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $sURL); 
+curl_setopt($ch, CURLOPT_TIMEOUT, '1'); 
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    'Content-Type: multipart/form-data',
+    'Ocp-Apim-Subscription-Key: cf96e207349f429383d69d8f092eab8d'
 ));
+$content = curl_exec($ch);
 
-$contents = file_get_contents('https://api.datamarket.azure.com/Bing/Search/Image?$format=json&$top=10&Adult='."'".'Strict'."'".'&Query='.$keyword, 0, $context);
+$contents = file_get_contents($content);
+
 $json = json_decode($contents);
 
-$images = array();
-foreach ($json->d->results as $result) {
-	$images[] = array($result->MediaUrl, $result->Thumbnail->MediaUrl);
-}
-$rand = rand(0, count($images)-1);
-$image_url = $images[$rand][0];
-$image_thumb_url = $images[$rand][1];
+$image_url = $json->{"value"}[0]->{"contentUrl"};
+$image_thumb_url = $json->{"value"}[0]->{"thumbnailUrl"};
 
 
 $response_format = [
