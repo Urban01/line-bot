@@ -11,7 +11,7 @@ $text = $jsonObj->{"events"}[0]->{"message"}->{"text"};
 $replyToken = $jsonObj->{"events"}[0]->{"replyToken"};
 $userId = $jsonObj->{"events"}[0]->{"source"}->{"userId"};
 
-$account_key = cf96e207349f429383d69d8f092eab8d
+$account_key = 'cf96e207349f429383d69d8f092eab8d'
 
 $keyword = urlencode("'" . $text . "'");
 $credencial = 'Authorization: Basic ' . base64_encode($account_key . ":" . $account_key);
